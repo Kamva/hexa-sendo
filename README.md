@@ -12,5 +12,3 @@ __TODO:__
 - [ ] Write tests
 - [ ] Add CI  to automate tests
 - [ ] Implement more drivers
-
-
