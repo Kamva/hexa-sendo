@@ -1,0 +1,6 @@
+github.com/kamva/tracer v0.0.0-20200802193105-6c0f308b9655 h1:znkvBi/J3pUEBcZNTwjmvPZLmmYIxdrypryvOW6DlA8=
+github.com/kamva/tracer v0.0.0-20200802193105-6c0f308b9655/go.mod h1:6TmvuXxFe7FD95QvNyIVEt2ZPfYBk3QiKGhGt+UwFbQ=
+github.com/kavenegar/kavenegar-go v0.0.0-20200629080648-6e28263b7162 h1:+eOkSUOm8ciNPL+pWawKfeNYKBNqmU4+k0iUjlI/Rug=
+github.com/kavenegar/kavenegar-go v0.0.0-20200629080648-6e28263b7162/go.mod h1:CRhvvr4KNAyrg+ewrutOf+/QoHs7lztSoLjp+GqhYlA=
+github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
+github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
