@@ -15,12 +15,14 @@ type Builder struct {
 	services sendoList
 }
 
-func (b *Builder) WithEmail(e EmailService) {
+func (b *Builder) WithEmail(e EmailService) *Builder {
 	b.services.email = e
+	return b
 }
 
-func (b *Builder) WithSMS(sms SMSService) {
+func (b *Builder) WithSMS(sms SMSService) *Builder{
 	b.services.sms = sms
+	return b
 }
 
 func (b *Builder) Build() Sendo {
