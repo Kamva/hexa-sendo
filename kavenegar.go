@@ -34,7 +34,7 @@ func NewKavenegarService(o KavenegarOptions) (SMSService, error) {
 	}, tracer.Trace(err)
 }
 
-func (s kavenegarService) SendMessage(o SendSMSOptions) error {
+func (s kavenegarService) Send(o SendSMSOptions) error {
 	msg, err := s.renderTemplate(o.TemplateName, o.Data)
 	if err != nil {
 		return tracer.Trace(err)

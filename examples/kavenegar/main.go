@@ -2,12 +2,12 @@ package main
 
 import (
 	"errors"
-	"github.com/kamva/sendo"
+	"github.com/kamva/gutil"
+	"github.com/kamva/hexa-sendo"
 	"github.com/kavenegar/kavenegar-go"
 	"log"
 	"os"
 	"path"
-	"runtime"
 )
 
 func main() {
@@ -20,7 +20,7 @@ func main() {
 	service, err := sendo.NewKavenegarService(sendo.KavenegarOptions{
 		Client: client,
 		Templates: map[string]string{
-			"hi": path.Join(sourcePath(), "templates/hi.tpl"),
+			"hi": path.Join(gutil.SourcePath(), "templates/hi.tpl"),
 		},
 	})
 	if err != nil {
@@ -35,7 +35,7 @@ func main() {
 }
 
 func sendSMS(s sendo.SMSService) error {
-	return s.SendMessage(sendo.SendSMSOptions{
+	return s.Send(sendo.SendSMSOptions{
 		TemplateName: "hi",
 		PhoneNumber:  "09366579399",
 		Data: map[string]interface{}{
@@ -52,9 +52,4 @@ func sendSpeedySMS(s sendo.SMSService) error {
 		Code:         "K-132443",
 		Extra:        nil,
 	})
-}
-
-func sourcePath() string {
-	_, filename, _, _ := runtime.Caller(1)
-	return path.Dir(filename)
 }

@@ -15,6 +15,6 @@ type SendSpeedySMSOptions struct {
 }
 
 type SMSService interface {
-	SendMessage(o SendSMSOptions) error
+	Send(o SendSMSOptions) error
 	SendSpeedySMS(o SendSpeedySMSOptions) error
 }
