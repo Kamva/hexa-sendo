@@ -2,6 +2,11 @@
 
 __Hexa Sendo__ sends email, sms using some API providers like Kavenegar and Sendinblue.
 
+__Implemented SMS drivers__
+- [x] Kavenegar
+
+__Implemented Email drivers__ 
+- [x] SendinBlue
 
 __TODO:__
 - [ ] Write tests
