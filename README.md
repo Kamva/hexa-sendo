@@ -1,6 +1,6 @@
 #### Sendo 
 
-__Sendo__ sends email, sms using some API providers like kavenegar, sendinblue.
+__Sendo__ sends email, sms using some API providers like Kavenegar and Sendinblue.
 
 
 __TODO:__
