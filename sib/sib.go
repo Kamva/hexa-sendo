@@ -2,6 +2,7 @@ package sib
 
 import (
 	"errors"
+	"github.com/kamva/gutil"
 	"github.com/kamva/hexa-sendo"
 	"github.com/kamva/tracer"
 )
@@ -24,7 +25,7 @@ func (s *sendinBlueEmailService) SendSMTP(o sendo.SendSMTPEmailOptions) error {
 		ReplyTo:    o.ReplyTo,
 		Subject:    o.Subject,
 		TemplateID: tplID,
-		Params:     o.Data,
+		Params:     gutil.StructToMap(o.Data),
 	})
 
 	return tracer.Trace(err)

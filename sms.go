@@ -3,7 +3,7 @@ package sendo
 type SendSMSOptions struct {
 	TemplateName string
 	PhoneNumber  string
-	Data         map[string]interface{}
+	Data         interface{}
 	Extra        []interface{} // extra options for various implementations.
 }
 

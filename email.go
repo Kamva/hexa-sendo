@@ -26,15 +26,15 @@ type EmailReplyTo struct {
 }
 
 type SendSMTPEmailOptions struct {
-	Sender       *EmailSender           // optional, driver should support default sender per for each template
-	From         *EmailFrom             // for some drivers can be optional, for some other required.
-	To           []EmailTo              // required
-	CC           []EmailCC              // optional
-	ReplyTo      *EmailReplyTo          // optional
-	Subject      *string                // optional, drivers must support default subject for each template.
-	TemplateName string                 // required
-	Data         map[string]interface{} // optional
-	Extra        []interface{}          // optional extra options.
+	Sender       *EmailSender  // optional, driver should support default sender per for each template
+	From         *EmailFrom    // for some drivers can be optional, for some other required.
+	To           []EmailTo     // required
+	CC           []EmailCC     // optional
+	ReplyTo      *EmailReplyTo // optional
+	Subject      *string       // optional, drivers must support default subject for each template.
+	TemplateName string        // required
+	Data         interface{}   // optional
+	Extra        []interface{} // optional extra options.
 	// TODO: add attachment,...
 }
 
