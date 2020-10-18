@@ -34,7 +34,7 @@ func NewKavenegarService(o KavenegarOptions) (SMSService, error) {
 	}, tracer.Trace(err)
 }
 
-func (s kavenegarService) Send(o SendSMSOptions) error {
+func (s kavenegarService) Send(o SMSOptions) error {
 	msg, err := s.renderTemplate(o.TemplateName, o.Data)
 	if err != nil {
 		return tracer.Trace(err)
@@ -63,7 +63,7 @@ func (s *kavenegarService) getSender(extraOptions []interface{}) KavenegarSender
 	return s.defaultSender
 }
 
-func (s kavenegarService) SendSpeedySMS(o SendSpeedySMSOptions) error {
+func (s kavenegarService) SendVerificationCode(o VerificationOptions) error {
 	var lookupParam *kavenegar.VerifyLookupParam
 	for _, v := range o.Extra {
 		if lp, ok := v.(*kavenegar.VerifyLookupParam); ok {

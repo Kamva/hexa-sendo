@@ -1,13 +1,13 @@
 package sendo
 
-type SendSMSOptions struct {
+type SMSOptions struct {
 	TemplateName string
 	PhoneNumber  string
 	Data         interface{}
 	Extra        []interface{} // extra options for various implementations.
 }
 
-type SendSpeedySMSOptions struct {
+type VerificationOptions struct {
 	TemplateName string
 	PhoneNumber  string
 	Code         string        // in the send speedy we can send code.
@@ -15,6 +15,6 @@ type SendSpeedySMSOptions struct {
 }
 
 type SMSService interface {
-	Send(o SendSMSOptions) error
-	SendSpeedySMS(o SendSpeedySMSOptions) error
+	Send(o SMSOptions) error
+	SendVerificationCode(o VerificationOptions) error
 }

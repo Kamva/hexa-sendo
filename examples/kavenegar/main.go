@@ -35,7 +35,7 @@ func main() {
 }
 
 func sendSMS(s sendo.SMSService) error {
-	return s.Send(sendo.SendSMSOptions{
+	return s.Send(sendo.SMSOptions{
 		TemplateName: "hi",
 		PhoneNumber:  "09366579399",
 		Data: map[string]interface{}{
@@ -46,7 +46,7 @@ func sendSMS(s sendo.SMSService) error {
 }
 
 func sendSpeedySMS(s sendo.SMSService) error {
-	return s.SendSpeedySMS(sendo.SendSpeedySMSOptions{
+	return s.SendVerificationCode(sendo.VerificationOptions{
 		TemplateName: "barekat",
 		PhoneNumber:  "09366579399",
 		Code:         "K-132443",
