@@ -3,8 +3,6 @@ package sendo
 import (
 	"bytes"
 	"fmt"
-	"github.com/kamva/gutil"
-	"github.com/kamva/hexa"
 	"github.com/kamva/hexa/hlog"
 	"github.com/kamva/tracer"
 	"text/template"
@@ -33,12 +31,12 @@ func (s smsLoggerService) Send(o SMSOptions) error {
 	if err != nil {
 		return tracer.Trace(err)
 	}
-	hlog.WithFields(gutil.MapToKeyValue(hexa.Map{
-		"to":            o.PhoneNumber,
-		"message":       msg,
-		"template_name": o.TemplateName,
-		"data":          fmt.Sprintf("%+v", o.Data),
-	})).Message("send sms")
+	hlog.Message("send sms",
+		hlog.String("to", o.PhoneNumber),
+		hlog.String("message", msg),
+		hlog.String("template_name", o.TemplateName),
+		hlog.String("data", fmt.Sprintf("%+v", o.Data)),
+	)
 	return nil
 }
 
@@ -51,7 +49,10 @@ func (s *smsLoggerService) renderTemplate(tplName string, data interface{}) (str
 }
 
 func (s smsLoggerService) SendVerificationCode(o VerificationOptions) error {
-	hlog.WithFields("to", o.PhoneNumber, "code", o.Code, "template_name", o.TemplateName).Message("send sms")
+	hlog.Message("send sms",
+		hlog.String("to", o.PhoneNumber),
+		hlog.String("code", o.Code),
+		hlog.String("template_name", o.TemplateName))
 	return nil
 }
 

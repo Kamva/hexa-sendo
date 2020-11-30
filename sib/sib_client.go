@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/kamva/gutil"
-	"github.com/kamva/hexa"
 	"github.com/kamva/hexa/hexahttp"
 	"github.com/kamva/hexa/hlog"
 	"github.com/kamva/tracer"
@@ -28,11 +27,12 @@ func (c *SendinblueClient) SendSMTPEmail(p SendSMTPEmailParams) (*SendSMTPEmailR
 	if resp.StatusCode != 201 {
 		err := fmt.Errorf("error with status code %v", resp.StatusCode)
 
-		hlog.WithFields(gutil.MapToKeyValue(hexa.Map{
-			"params":     string(gutil.Must(json.Marshal(params)).([]byte)),
-			"resp":       fmt.Sprintf("%+v", resp),
-			"statusCode": resp.StatusCode,
-		})).Error(err)
+		hlog.Error("error on send SMTP email",
+			hlog.Err(err),
+			hlog.String("params", string(gutil.Must(json.Marshal(params)).([]byte))),
+			hlog.String("resp", fmt.Sprintf("%+v", resp)),
+			hlog.Int("status_code", resp.StatusCode),
+		)
 		return nil, tracer.Trace(err)
 	}
 	b, err := hexahttp.Bytes(resp, err)
