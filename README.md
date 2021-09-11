@@ -4,6 +4,7 @@ __Hexa Sendo__ sends email, sms using some API providers like Kavenegar and Send
 
 __Implemented SMS drivers__
 - [x] Kavenegar
+- [x] Twilio
 
 __Implemented Email drivers__ 
 - [x] SendinBlue
