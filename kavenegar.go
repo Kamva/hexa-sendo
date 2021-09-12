@@ -2,24 +2,23 @@ package sendo
 
 import (
 	"bytes"
+	"text/template"
+
 	"github.com/kamva/tracer"
 	"github.com/kavenegar/kavenegar-go"
-	"text/template"
 )
-
-type KavenegarSender string
 
 // kavenegarService implements the SMSService.
 type kavenegarService struct {
 	client        *kavenegar.Kavenegar
-	defaultSender KavenegarSender
+	defaultSender string
 
 	tpl *template.Template
 }
 
 type KavenegarOptions struct {
 	Client        *kavenegar.Kavenegar
-	DefaultSender KavenegarSender
+	DefaultSender string
 
 	Templates map[string]string
 }
@@ -40,9 +39,11 @@ func (s kavenegarService) Send(o SMSOptions) error {
 		return tracer.Trace(err)
 	}
 
-	sender := s.getSender(o.Extra)
+	if o.Sender == "" {
+		o.Sender = s.defaultSender
+	}
 
-	_, err = s.client.Message.Send(string(sender), []string{o.PhoneNumber}, msg, nil)
+	_, err = s.client.Message.Send(o.Sender, []string{o.PhoneNumber}, msg, nil)
 	return tracer.Trace(err)
 }
 
@@ -54,15 +55,7 @@ func (s *kavenegarService) renderTemplate(tplName string, data interface{}) (str
 	return buf.String(), nil
 }
 
-func (s *kavenegarService) getSender(extraOptions []interface{}) KavenegarSender {
-	for _, v := range extraOptions {
-		if s, ok := v.(KavenegarSender); ok {
-			return s
-		}
-	}
-	return s.defaultSender
-}
-
+// SendVerificationCode ignores the sender param in kavenegar driver.
 func (s kavenegarService) SendVerificationCode(o VerificationOptions) error {
 	var lookupParam *kavenegar.VerifyLookupParam
 	for _, v := range o.Extra {
