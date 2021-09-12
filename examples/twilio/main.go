@@ -12,14 +12,12 @@ import (
 func main() {
 	sid := os.Getenv("TWILIO_ACCOUNT_SID")
 	authToken := os.Getenv("TWILIO_AUTH_TOKEN")
-	sender := os.Getenv("TWILIO_SENDER")
 
 	if sid == "" || authToken == "" {
 		log.Fatal(errors.New("provide twilio sid & auth_token"))
 	}
 
 	service, err := sendo.NewTwilioService(sendo.TwilioOptions{
-		Sender:     sender,
 		AccountSID: sid,
 		AuthToken:  authToken,
 		Templates: map[string]string{
@@ -39,6 +37,7 @@ func sendVerificationSMS(s sendo.SMSService) error {
 		TemplateName: "verify",
 		PhoneNumber:  "+989130022039",
 		Code:         "132443",
+		Sender:       os.Getenv("TWILIO_SENDER"),
 		Extra:        nil,
 	})
 }

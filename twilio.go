@@ -14,13 +14,11 @@ type TwilioService struct {
 	client        *twilio.RestClient
 	tpl           *template.Template
 	defaultSender TwilioSender
-	sender        string
 }
 
 type TwilioOptions struct {
 	AccountSID string
 	AuthToken  string
-	Sender     string
 	Templates  map[string]string
 }
 
@@ -29,8 +27,7 @@ func NewTwilioService(o TwilioOptions) (SMSService, error) {
 	t, err := parseTextTemplates("twilio_root", o.Templates)
 
 	return &TwilioService{
-		tpl:    t,
-		sender: o.Sender,
+		tpl: t,
 		client: twilio.NewRestClientWithParams(twilio.RestClientParams{
 			Username: o.AccountSID,
 			Password: o.AuthToken,
@@ -54,7 +51,7 @@ func (s *TwilioService) Send(o SMSOptions) error {
 
 	params := &openapi.CreateMessageParams{}
 	params.SetTo(o.PhoneNumber)
-	params.SetFrom(s.sender)
+	params.SetFrom(o.Sender)
 	params.SetBody(msg)
 
 	_, err = s.client.ApiV2010.CreateMessage(params)
@@ -72,7 +69,7 @@ func (s *TwilioService) SendVerificationCode(o VerificationOptions) error {
 
 	params := &openapi.CreateMessageParams{}
 	params.SetTo(o.PhoneNumber)
-	params.SetFrom(s.sender)
+	params.SetFrom(o.Sender)
 	params.SetBody(msg)
 
 	_, err = s.client.ApiV2010.CreateMessage(params)
