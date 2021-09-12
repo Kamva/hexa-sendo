@@ -14,11 +14,13 @@ type TwilioService struct {
 	client        *twilio.RestClient
 	tpl           *template.Template
 	defaultSender TwilioSender
+	sender        string
 }
 
 type TwilioOptions struct {
 	AccountSID string
 	AuthToken  string
+	Sender     string
 	Templates  map[string]string
 }
 
@@ -27,11 +29,12 @@ func NewTwilioService(o TwilioOptions) (SMSService, error) {
 	t, err := parseTextTemplates("twilio_root", o.Templates)
 
 	return &TwilioService{
+		tpl:    t,
+		sender: o.Sender,
 		client: twilio.NewRestClientWithParams(twilio.RestClientParams{
 			Username: o.AccountSID,
 			Password: o.AuthToken,
 		}),
-		tpl: t,
 	}, tracer.Trace(err)
 }
 
@@ -43,15 +46,6 @@ func (s *TwilioService) renderTemplate(tplName string, data interface{}) (string
 	return buf.String(), nil
 }
 
-func (s *TwilioService) getSender(extraOptions []interface{}) TwilioSender {
-	for _, v := range extraOptions {
-		if s, ok := v.(TwilioSender); ok {
-			return s
-		}
-	}
-	return s.defaultSender
-}
-
 func (s *TwilioService) Send(o SMSOptions) error {
 	msg, err := s.renderTemplate(o.TemplateName, o.Data)
 	if err != nil {
@@ -60,7 +54,7 @@ func (s *TwilioService) Send(o SMSOptions) error {
 
 	params := &openapi.CreateMessageParams{}
 	params.SetTo(o.PhoneNumber)
-	params.SetFrom(string(s.getSender(o.Extra)))
+	params.SetFrom(s.sender)
 	params.SetBody(msg)
 
 	_, err = s.client.ApiV2010.CreateMessage(params)
@@ -78,7 +72,7 @@ func (s *TwilioService) SendVerificationCode(o VerificationOptions) error {
 
 	params := &openapi.CreateMessageParams{}
 	params.SetTo(o.PhoneNumber)
-	params.SetFrom(string(s.getSender(o.Extra)))
+	params.SetFrom(s.sender)
 	params.SetBody(msg)
 
 	_, err = s.client.ApiV2010.CreateMessage(params)
