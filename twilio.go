@@ -8,18 +8,17 @@ import (
 	"text/template"
 )
 
-type TwilioSender string
-
 type TwilioService struct {
 	client        *twilio.RestClient
 	tpl           *template.Template
-	defaultSender TwilioSender
+	defaultSender string
 }
 
 type TwilioOptions struct {
-	AccountSID string
-	AuthToken  string
-	Templates  map[string]string
+	AccountSID    string
+	AuthToken     string
+	Templates     map[string]string
+	DefaultSender string
 }
 
 func NewTwilioService(o TwilioOptions) (SMSService, error) {
@@ -32,6 +31,7 @@ func NewTwilioService(o TwilioOptions) (SMSService, error) {
 			Username: o.AccountSID,
 			Password: o.AuthToken,
 		}),
+		defaultSender: o.DefaultSender,
 	}, tracer.Trace(err)
 }
 
@@ -47,6 +47,10 @@ func (s *TwilioService) Send(o SMSOptions) error {
 	msg, err := s.renderTemplate(o.TemplateName, o.Data)
 	if err != nil {
 		return tracer.Trace(err)
+	}
+
+	if o.Sender == "" {
+		o.Sender = s.defaultSender
 	}
 
 	params := &openapi.CreateMessageParams{}
@@ -65,6 +69,10 @@ func (s *TwilioService) SendVerificationCode(o VerificationOptions) error {
 
 	if err != nil {
 		return tracer.Trace(err)
+	}
+
+	if o.Sender == "" {
+		o.Sender = s.defaultSender
 	}
 
 	params := &openapi.CreateMessageParams{}
