@@ -2,10 +2,12 @@ package sendo
 
 import (
 	"bytes"
+	"context"
+	"text/template"
+
 	"github.com/kamva/tracer"
 	"github.com/twilio/twilio-go"
 	openapi "github.com/twilio/twilio-go/rest/api/v2010"
-	"text/template"
 )
 
 type TwilioService struct {
@@ -43,7 +45,7 @@ func (s *TwilioService) renderTemplate(tplName string, data interface{}) (string
 	return buf.String(), nil
 }
 
-func (s *TwilioService) Send(o SMSOptions) error {
+func (s *TwilioService) Send(_ context.Context,o SMSOptions) error {
 	msg, err := s.renderTemplate(o.TemplateName, o.Data)
 	if err != nil {
 		return tracer.Trace(err)
@@ -62,7 +64,7 @@ func (s *TwilioService) Send(o SMSOptions) error {
 	return tracer.Trace(err)
 }
 
-func (s *TwilioService) SendVerificationCode(o VerificationOptions) error {
+func (s *TwilioService) SendVerificationCode(_ context.Context,o VerificationOptions) error {
 	msg, err := s.renderTemplate(o.TemplateName, map[string]interface{}{
 		"code": o.Code,
 	})

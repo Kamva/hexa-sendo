@@ -1,12 +1,14 @@
 package main
 
 import (
+	"context"
 	"errors"
-	"github.com/kamva/gutil"
-	"github.com/kamva/hexa-sendo"
 	"log"
 	"os"
 	"path"
+
+	"github.com/kamva/gutil"
+	"github.com/kamva/hexa-sendo"
 )
 
 func main() {
@@ -33,7 +35,7 @@ func main() {
 }
 
 func sendVerificationSMS(s sendo.SMSService) error {
-	return s.SendVerificationCode(sendo.VerificationOptions{
+	return s.SendVerificationCode(context.Background(), sendo.VerificationOptions{
 		TemplateName: "verify",
 		PhoneNumber:  "+989130022039",
 		Code:         "132443",
