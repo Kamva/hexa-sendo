@@ -1,7 +1,9 @@
 package sib
 
 import (
+	"context"
 	"errors"
+
 	"github.com/kamva/gutil"
 	"github.com/kamva/hexa-sendo"
 	"github.com/kamva/tracer"
@@ -12,7 +14,7 @@ type sendinBlueEmailService struct {
 	templates map[string]int64
 }
 
-func (s *sendinBlueEmailService) SendSMTP(o sendo.SendSMTPEmailOptions) error {
+func (s *sendinBlueEmailService) SendSMTP(_ context.Context,o sendo.SendSMTPEmailOptions) error {
 	tplID, ok := s.templates[o.TemplateName]
 	if !ok {
 		return tracer.Trace(errors.New("can not send email using sib, template id not found"))

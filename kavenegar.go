@@ -2,6 +2,7 @@ package sendo
 
 import (
 	"bytes"
+	"context"
 	"text/template"
 
 	"github.com/kamva/tracer"
@@ -33,7 +34,7 @@ func NewKavenegarService(o KavenegarOptions) (SMSService, error) {
 	}, tracer.Trace(err)
 }
 
-func (s kavenegarService) Send(o SMSOptions) error {
+func (s kavenegarService) Send(_ context.Context, o SMSOptions) error {
 	msg, err := s.renderTemplate(o.TemplateName, o.Data)
 	if err != nil {
 		return tracer.Trace(err)
@@ -56,7 +57,7 @@ func (s *kavenegarService) renderTemplate(tplName string, data interface{}) (str
 }
 
 // SendVerificationCode ignores the sender param in kavenegar driver.
-func (s kavenegarService) SendVerificationCode(o VerificationOptions) error {
+func (s kavenegarService) SendVerificationCode(_ context.Context, o VerificationOptions) error {
 	var lookupParam *kavenegar.VerifyLookupParam
 	for _, v := range o.Extra {
 		if lp, ok := v.(*kavenegar.VerifyLookupParam); ok {

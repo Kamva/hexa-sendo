@@ -2,10 +2,12 @@ package sendo
 
 import (
 	"bytes"
+	"context"
 	"fmt"
+	"text/template"
+
 	"github.com/kamva/hexa/hlog"
 	"github.com/kamva/tracer"
-	"text/template"
 )
 
 type SMSLoggerOptions struct {
@@ -26,7 +28,7 @@ func NewSMSLoggerService(o SMSLoggerOptions) (SMSService, error) {
 	}, tracer.Trace(err)
 }
 
-func (s smsLoggerService) Send(o SMSOptions) error {
+func (s smsLoggerService) Send(_ context.Context, o SMSOptions) error {
 	msg, err := s.renderTemplate(o.TemplateName, o.Data)
 	if err != nil {
 		return tracer.Trace(err)
@@ -48,7 +50,7 @@ func (s *smsLoggerService) renderTemplate(tplName string, data interface{}) (str
 	return buf.String(), nil
 }
 
-func (s smsLoggerService) SendVerificationCode(o VerificationOptions) error {
+func (s smsLoggerService) SendVerificationCode(_ context.Context, o VerificationOptions) error {
 	hlog.Message("send sms",
 		hlog.String("to", o.PhoneNumber),
 		hlog.String("code", o.Code),

@@ -1,10 +1,12 @@
 package main
 
 import (
+	"context"
+	"os"
+
 	"github.com/kamva/gutil"
 	sendo "github.com/kamva/hexa-sendo"
 	"github.com/kamva/hexa-sendo/sib"
-	"os"
 )
 
 func main() {
@@ -17,7 +19,7 @@ func main() {
 		},
 	})
 
-	err := service.SendSMTP(sendo.SendSMTPEmailOptions{
+	err := service.SendSMTP(context.Background(),sendo.SendSMTPEmailOptions{
 		To: []sendo.EmailTo{
 			{
 				Name:  "mehran prs",

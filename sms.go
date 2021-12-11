@@ -1,5 +1,7 @@
 package sendo
 
+import "context"
+
 type SMSOptions struct {
 	TemplateName string
 	Sender       string
@@ -17,6 +19,6 @@ type VerificationOptions struct {
 }
 
 type SMSService interface {
-	Send(o SMSOptions) error
-	SendVerificationCode(o VerificationOptions) error
+	Send(ctx context.Context, o SMSOptions) error
+	SendVerificationCode(ctx context.Context, o VerificationOptions) error
 }

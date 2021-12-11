@@ -1,5 +1,7 @@
 package sendo
 
+import "context"
+
 type EmailSender struct {
 	Name  string // optional
 	Email string // required
@@ -39,5 +41,5 @@ type SendSMTPEmailOptions struct {
 }
 
 type EmailService interface {
-	SendSMTP(o SendSMTPEmailOptions) error
+	SendSMTP(ctx context.Context, o SendSMTPEmailOptions) error
 }
