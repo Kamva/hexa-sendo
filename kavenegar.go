@@ -58,12 +58,7 @@ func (s *kavenegarService) renderTemplate(tplName string, data interface{}) (str
 
 // SendVerificationCode ignores the sender param in kavenegar driver.
 func (s kavenegarService) SendVerificationCode(_ context.Context, o VerificationOptions) error {
-	var lookupParam *kavenegar.VerifyLookupParam
-	for _, v := range o.Extra {
-		if lp, ok := v.(*kavenegar.VerifyLookupParam); ok {
-			lookupParam = lp
-		}
-	}
+	lookupParam := extraOption[*kavenegar.VerifyLookupParam](o.Extra)
 	_, err := s.client.Verify.Lookup(o.PhoneNumber, o.TemplateName, o.Code, lookupParam)
 	return tracer.Trace(err)
 }
