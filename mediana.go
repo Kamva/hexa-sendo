@@ -25,7 +25,7 @@ type MedianaOptions struct {
 }
 
 func NewMedianaService(o MedianaOptions) (SMSService, error) {
-	t, err := parseTextTemplates("kavenegar_root", o.Templates)
+	t, err := parseTextTemplates("mediana_root", o.Templates)
 
 	return &medianaService{
 		client:        hexahttp.NewClient(&o.APIUrl),
@@ -33,10 +33,6 @@ func NewMedianaService(o MedianaOptions) (SMSService, error) {
 		token:         o.Token,
 		tpl:           t,
 	}, tracer.Trace(err)
-}
-
-type medianaMessage struct {
-	Message string
 }
 
 func (s medianaService) Send(_ context.Context, o SMSOptions) error {
@@ -77,4 +73,4 @@ func (s medianaService) SendVerificationCode(_a context.Context, o VerificationO
 	return nil
 }
 
-var _ SMSService = &kavenegarService{}
+var _ SMSService = &medianaService{}
