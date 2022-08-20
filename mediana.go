@@ -3,6 +3,7 @@ package sendo
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"github.com/kamva/hexa"
 	"github.com/kamva/hexa/hexahttp"
 	"github.com/kamva/tracer"
@@ -35,12 +36,30 @@ func NewMedianaService(o MedianaOptions) (SMSService, error) {
 	}, tracer.Trace(err)
 }
 
+type MedianaExtra struct {
+	Token string
+}
+
 func (s medianaService) Send(_ context.Context, o SMSOptions) error {
 	msg, err := s.renderTemplate(o.TemplateName, o.Data)
 	if err != nil {
 		return tracer.Trace(err)
 	}
-	var authorizationHeader = hexahttp.AuthenticateHeader("apikey", "", s.token)
+
+	extraJsonStr, err := json.Marshal(o.Extra)
+	if err != nil {
+		return tracer.Trace(err)
+	}
+	var medianaExtra MedianaExtra
+	if err = json.Unmarshal(extraJsonStr, &medianaExtra); err != nil {
+		return tracer.Trace(err)
+	}
+
+	var authorizationHeader = hexahttp.AuthenticateHeader("apikey", "", medianaExtra.Token)
+	if authorizationHeader == nil {
+		authorizationHeader = hexahttp.AuthenticateHeader("apikey", "", s.token)
+	}
+
 	var recipients []string
 	recipients = append(recipients, "+"+o.PhoneNumber)
 	sender := o.Sender
