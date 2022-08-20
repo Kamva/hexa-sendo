@@ -3,11 +3,12 @@ package sendo
 import (
 	"bytes"
 	"context"
-	"encoding/json"
+	"text/template"
+
 	"github.com/kamva/hexa"
 	"github.com/kamva/hexa/hexahttp"
+	"github.com/kamva/hexa/hlog"
 	"github.com/kamva/tracer"
-	"text/template"
 )
 
 // medianaService implements the SMSService.
@@ -46,32 +47,23 @@ func (s medianaService) Send(_ context.Context, o SMSOptions) error {
 		return tracer.Trace(err)
 	}
 
-	extraJsonStr, err := json.Marshal(o.Extra)
-	if err != nil {
-		return tracer.Trace(err)
+	token := s.token
+	if extraOptToken := extraOption[*ExtraOptionsToken](o.Extra); extraOptToken != nil {
+		token = extraOptToken.Tokens
 	}
-	var medianaExtra MedianaExtra
-	if err = json.Unmarshal(extraJsonStr, &medianaExtra); err != nil {
-		return tracer.Trace(err)
-	}
+	var authorizationHeader = hexahttp.AuthenticateHeader("apikey", "", token)
 
-	var authorizationHeader = hexahttp.AuthenticateHeader("apikey", "", medianaExtra.Token)
-	if authorizationHeader == nil {
-		authorizationHeader = hexahttp.AuthenticateHeader("apikey", "", s.token)
-	}
-
-	var recipients []string
-	recipients = append(recipients, "+"+o.PhoneNumber)
 	sender := o.Sender
 	if sender == "" {
 		sender = s.defaultSender
 	}
 
-	resp, err := s.client.PostJsonFormWithOptions("sms/send/webservice/single", hexa.Map{
-		"recipient": recipients,
+	payload := hexa.Map{
+		"recipient": []string{"+" + o.PhoneNumber},
 		"sender":    sender,
 		"message":   msg,
-	}, authorizationHeader)
+	}
+	resp, err := s.client.PostJsonFormWithOptions("sms/send/webservice/single", payload, authorizationHeader)
 	if err != nil {
 		return err
 	}
@@ -88,7 +80,7 @@ func (s *medianaService) renderTemplate(tplName string, data interface{}) (strin
 
 // SendVerificationCode ignores the sender param in mediana driver.
 func (s medianaService) SendVerificationCode(_a context.Context, o VerificationOptions) error {
-
+	hlog.Warn("mediana driver doesn't support verification code sms type.")
 	return nil
 }
 

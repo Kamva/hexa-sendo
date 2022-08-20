@@ -3,9 +3,12 @@ package main
 import (
 	"context"
 	"errors"
-	sendo "github.com/kamva/hexa-sendo"
 	"log"
 	"os"
+	"path"
+
+	"github.com/kamva/gutil"
+	sendo "github.com/kamva/hexa-sendo"
 )
 
 func main() {
@@ -16,6 +19,9 @@ func main() {
 	}
 
 	service, err := sendo.NewMedianaService(sendo.MedianaOptions{
+		Templates: map[string]string{
+			"hi": path.Join(gutil.SourcePath(), "templates/hi.tpl"),
+		},
 		APIUrl:        "http://apixxx.xxx.xx/api/v1",
 		Token:         apiKey,
 		DefaultSender: "+989xxxxxx",
@@ -30,7 +36,8 @@ func main() {
 
 func sendSMS(s sendo.SMSService) error {
 	return s.Send(context.Background(), sendo.SMSOptions{
-		PhoneNumber: "98912xxxxxxxx",
+		TemplateName: "hi",
+		PhoneNumber:  "98912xxxxxxxx",
 		Data: map[string]interface{}{
 			"Name": "مهران",
 		},
