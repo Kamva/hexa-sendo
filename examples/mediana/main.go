@@ -32,7 +32,7 @@ func sendSMS(s sendo.SMSService) error {
 	return s.Send(context.Background(), sendo.SMSOptions{
 		PhoneNumber: "98912xxxxxxxx",
 		Data: map[string]interface{}{
-			"Message": "سلام این یک پیام تستی است.",
+			"Name": "مهران",
 		},
 	})
 }
