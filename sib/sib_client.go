@@ -21,7 +21,7 @@ type SendSMTPEmailResponse struct {
 
 func (c *SendinblueClient) SendSMTPEmail(p SendSMTPEmailParams) (*SendSMTPEmailResponse, error) {
 	params := p.RequestParams()
-	resp, err := c.client.PostJsonFormWithOptions("smtp/email", params, c.auth)
+	resp, err := c.client.PostJsonForm("smtp/email", params, c.auth)
 	if err != nil {
 		return nil, tracer.Trace(err)
 	}
@@ -44,9 +44,21 @@ func (c *SendinblueClient) SendSMTPEmail(p SendSMTPEmailParams) (*SendSMTPEmailR
 	return &data, tracer.Trace(json.Unmarshal(b, &resp))
 }
 
-func NewClient(apiKey string) *SendinblueClient {
+// NewClient creates a new Sendinblue client.
+// The hexahttp Client param must have the base sendinblue API url as a base url.
+// e.g., hexahttp.NewClient("https://api.sendinblue.com/v3")
+func NewClient(cli *hexahttp.Client, apiKey string) *SendinblueClient {
 	return &SendinblueClient{
-		client: hexahttp.NewClient(gutil.NewString("https://api.sendinblue.com/v3")),
+		client: cli,
 		auth:   hexahttp.AuthenticateHeader("api-key", "", apiKey),
 	}
+}
+
+func NewClientWithDefaults(apiKey string, httpClientLogMode uint) (*SendinblueClient, error) {
+	cli, err := hexahttp.NewClient("https://api.sendinblue.com/v3", httpClientLogMode)
+	if err != nil {
+		return nil, tracer.Trace(err)
+	}
+
+	return NewClient(cli, apiKey), nil
 }

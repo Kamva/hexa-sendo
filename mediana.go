@@ -20,7 +20,7 @@ type medianaService struct {
 }
 
 type MedianaOptions struct {
-	APIUrl        string
+	ApiClient     *hexahttp.Client // APIClient must have base api url as its base API url. (e.g., abc.com/api/v1).
 	Token         string
 	DefaultSender string
 	Templates     map[string]string
@@ -28,9 +28,12 @@ type MedianaOptions struct {
 
 func NewMedianaService(o MedianaOptions) (SMSService, error) {
 	t, err := parseTextTemplates("mediana_root", o.Templates)
+	if err != nil {
+		return nil, tracer.Trace(err)
+	}
 
 	return &medianaService{
-		client:        hexahttp.NewClient(&o.APIUrl),
+		client:        o.ApiClient,
 		defaultSender: o.DefaultSender,
 		token:         o.Token,
 		tpl:           t,
@@ -63,11 +66,9 @@ func (s medianaService) Send(_ context.Context, o SMSOptions) error {
 		"sender":    sender,
 		"message":   msg,
 	}
-	resp, err := s.client.PostJsonFormWithOptions("sms/send/webservice/single", payload, authorizationHeader)
-	if err != nil {
-		return err
-	}
-	return hexahttp.ResponseError(resp)
+
+	_, err = hexahttp.ResponseErr(s.client.PostJsonForm("sms/send/webservice/single", payload, authorizationHeader))
+	return tracer.Trace(err)
 }
 
 func (s *medianaService) renderTemplate(tplName string, data interface{}) (string, error) {

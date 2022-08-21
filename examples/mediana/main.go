@@ -9,6 +9,7 @@ import (
 
 	"github.com/kamva/gutil"
 	sendo "github.com/kamva/hexa-sendo"
+	"github.com/kamva/hexa/hexahttp"
 )
 
 func main() {
@@ -18,11 +19,13 @@ func main() {
 		log.Fatal(errors.New("provide mediana api key please"))
 	}
 
+	cli, err := hexahttp.NewClient("http://apixxx.xxx.xx/api/v1", hexahttp.LogModeNone)
+
 	service, err := sendo.NewMedianaService(sendo.MedianaOptions{
+		ApiClient: cli,
 		Templates: map[string]string{
 			"hi": path.Join(gutil.SourcePath(), "templates/hi.tpl"),
 		},
-		APIUrl:        "http://apixxx.xxx.xx/api/v1",
 		Token:         apiKey,
 		DefaultSender: "+989xxxxxx",
 	})
