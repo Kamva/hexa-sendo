@@ -48,7 +48,7 @@ func (s medianaService) Send(_ context.Context, o SMSOptions) error {
 	}
 
 	token := s.token
-	if extraOptToken := extraOption[*ExtraOptionsToken](o.Extra); extraOptToken != nil {
+	if extraOptToken := extraOption[*ExtraOptionToken](o.Extra); extraOptToken != nil {
 		token = extraOptToken.Tokens
 	}
 	var authorizationHeader = hexahttp.AuthenticateHeader("apikey", "", token)

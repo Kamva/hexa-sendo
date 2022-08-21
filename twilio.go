@@ -24,7 +24,6 @@ type TwilioOptions struct {
 }
 
 func NewTwilioService(o TwilioOptions) (SMSService, error) {
-
 	t, err := parseTextTemplates("twilio_root", o.Templates)
 
 	return &TwilioService{
@@ -45,7 +44,7 @@ func (s *TwilioService) renderTemplate(tplName string, data interface{}) (string
 	return buf.String(), nil
 }
 
-func (s *TwilioService) Send(_ context.Context,o SMSOptions) error {
+func (s *TwilioService) Send(_ context.Context, o SMSOptions) error {
 	msg, err := s.renderTemplate(o.TemplateName, o.Data)
 	if err != nil {
 		return tracer.Trace(err)
@@ -64,7 +63,7 @@ func (s *TwilioService) Send(_ context.Context,o SMSOptions) error {
 	return tracer.Trace(err)
 }
 
-func (s *TwilioService) SendVerificationCode(_ context.Context,o VerificationOptions) error {
+func (s *TwilioService) SendVerificationCode(_ context.Context, o VerificationOptions) error {
 	msg, err := s.renderTemplate(o.TemplateName, map[string]interface{}{
 		"code": o.Code,
 	})
