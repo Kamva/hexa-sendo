@@ -3,6 +3,7 @@ package sib
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 
 	"github.com/kamva/gutil"
 	"github.com/kamva/hexa/hexahttp"
@@ -25,6 +26,8 @@ func (c *SendinblueClient) SendSMTPEmail(p SendSMTPEmailParams) (*SendSMTPEmailR
 	if err != nil {
 		return nil, tracer.Trace(err)
 	}
+	defer resp.Body.Close()
+
 	if resp.StatusCode != 201 {
 		err := fmt.Errorf("error with status code %v", resp.StatusCode)
 
@@ -36,7 +39,7 @@ func (c *SendinblueClient) SendSMTPEmail(p SendSMTPEmailParams) (*SendSMTPEmailR
 		)
 		return nil, tracer.Trace(err)
 	}
-	b, err := hexahttp.Bytes(resp, err)
+	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, tracer.Trace(err)
 	}

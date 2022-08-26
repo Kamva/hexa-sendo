@@ -316,6 +316,8 @@ github.com/kamva/hexa v0.0.0-20220821205325-ac27273ade86 h1:tlNi9x/mHffYLpcaaTNe
 github.com/kamva/hexa v0.0.0-20220821205325-ac27273ade86/go.mod h1:AJ/6TiObRVKfW5lHY33NF8Ms0cphMQQosiFZQCRzAm0=
 github.com/kamva/hexa v0.0.0-20220821213150-e401adf1fcc7 h1:tk5SjTgdTUD2IHF7Wx1r0l+0tY+bkrPJUZQreQzjyLU=
 github.com/kamva/hexa v0.0.0-20220821213150-e401adf1fcc7/go.mod h1:AJ/6TiObRVKfW5lHY33NF8Ms0cphMQQosiFZQCRzAm0=
+github.com/kamva/hexa v0.0.0-20220826181805-e2e253902c7a h1:qfjPQQhPfJERh7Ekit3BzeflOb4tdZcSVOfPPL4+CTI=
+github.com/kamva/hexa v0.0.0-20220826181805-e2e253902c7a/go.mod h1:AJ/6TiObRVKfW5lHY33NF8Ms0cphMQQosiFZQCRzAm0=
 github.com/kamva/tracer v0.0.0-20201115122932-ea39052d56cd h1:Wa2QzkBIqaWTsWb9gVtQxijZqweUXKkakFLhXOacG5k=
 github.com/kamva/tracer v0.0.0-20201115122932-ea39052d56cd/go.mod h1:6TmvuXxFe7FD95QvNyIVEt2ZPfYBk3QiKGhGt+UwFbQ=
 github.com/kavenegar/kavenegar-go v0.0.0-20200629080648-6e28263b7162 h1:+eOkSUOm8ciNPL+pWawKfeNYKBNqmU4+k0iUjlI/Rug=

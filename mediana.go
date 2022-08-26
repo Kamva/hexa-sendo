@@ -67,8 +67,11 @@ func (s medianaService) Send(_ context.Context, o SMSOptions) error {
 		"message":   msg,
 	}
 
-	_, err = hexahttp.ResponseErr(s.client.PostJsonForm("sms/send/webservice/single", payload, authorizationHeader))
-	return tracer.Trace(err)
+	r, err := s.client.PostJsonForm("sms/send/webservice/single", payload, authorizationHeader)
+	if err != nil {
+		return tracer.Trace(err)
+	}
+	return tracer.Trace(hexahttp.ResponseErr(r))
 }
 
 func (s *medianaService) renderTemplate(tplName string, data interface{}) (string, error) {
