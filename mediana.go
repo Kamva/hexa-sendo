@@ -7,7 +7,6 @@ import (
 
 	"github.com/kamva/hexa"
 	"github.com/kamva/hexa/hexahttp"
-	"github.com/kamva/hexa/hlog"
 	"github.com/kamva/tracer"
 )
 
@@ -83,9 +82,14 @@ func (s *medianaService) renderTemplate(tplName string, data interface{}) (strin
 }
 
 // SendVerificationCode ignores the sender param in mediana driver.
-func (s medianaService) SendVerificationCode(_a context.Context, o VerificationOptions) error {
-	hlog.Warn("mediana driver doesn't support verification code sms type.")
-	return nil
+func (s medianaService) SendVerificationCode(ctx context.Context, o VerificationOptions) error {
+	return s.Send(ctx, SMSOptions{
+		TemplateName: o.TemplateName,
+		Sender:       o.Sender,
+		PhoneNumber:  o.PhoneNumber,
+		Data:         hexa.Map{"Code": o.Code},
+		Extra:        o.Extra,
+	})
 }
 
 var _ SMSService = &medianaService{}
